@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: racing-game-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    # -k eventlet lets one worker hold many open websocket connections at once
+    # (needed for multiplayer). -w 1 (single worker) is required too: player
+    # state lives in memory, and multiple worker processes wouldn't share it.
+    startCommand: gunicorn --worker-class eventlet -w 1 run:app
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: racing-game-db
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: "*"   # tighten to your real frontend URL once deployed
+
+databases:
+  - name: racing-game-db
+    plan: free
