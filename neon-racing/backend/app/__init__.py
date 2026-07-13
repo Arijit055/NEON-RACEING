@@ -9,10 +9,6 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
-
-    with app.app_context():
-        db.create_all()
-
     jwt.init_app(app)
     cors.init_app(app, resources={r"/api/*": {"origins": app.config["CORS_ORIGIN"]}})
     socketio.init_app(app, cors_allowed_origins=app.config["CORS_ORIGIN"])
@@ -31,6 +27,11 @@ def create_app():
     app.register_blueprint(run_bp, url_prefix="/api/run")
     app.register_blueprint(challenges_bp, url_prefix="/api/challenges")
     app.register_blueprint(leaderboard_bp, url_prefix="/api/leaderboard")
+
+    # models are imported (transitively, via the blueprints above) by this point,
+    # so SQLAlchemy's metadata now knows about every table and can create them
+    with app.app_context():
+        db.create_all()
 
     @app.route("/health")
     def health():
