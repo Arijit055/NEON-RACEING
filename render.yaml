@@ -3,11 +3,11 @@ services:
     name: racing-game-backend
     env: python
     plan: free
-    # পাথ আপডেট করা হয়েছে:
     buildCommand: cd neon-racing/backend && pip install -r requirements.txt
-    # পাথ আপডেট করা হয়েছে:
     startCommand: cd neon-racing/backend && gunicorn --worker-class eventlet -w 1 run:app
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
       - key: DATABASE_URL
         fromDatabase:
           name: racing-game-db
@@ -16,7 +16,6 @@ services:
         generateValue: true
       - key: CORS_ORIGIN
         value: "*"
-
 databases:
   - name: racing-game-db
     plan: free
