@@ -1,11 +1,13 @@
-import os
+import eventlet
+eventlet.monkey_patch()
 
+import os
 from app import create_app
 from app.extensions import socketio
 
 app = create_app()
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     port = int(os.environ.get("PORT", 5000))
     # socketio.run (instead of app.run) so the multiplayer websocket works too —
     # still just one command, no extra server needed.
