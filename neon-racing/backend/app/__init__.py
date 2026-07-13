@@ -9,6 +9,10 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
+
+    with app.app_context():
+        db.create_all()
+
     jwt.init_app(app)
     cors.init_app(app, resources={r"/api/*": {"origins": app.config["CORS_ORIGIN"]}})
     socketio.init_app(app, cors_allowed_origins=app.config["CORS_ORIGIN"])
