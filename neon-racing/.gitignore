@@ -1,0 +1,14 @@
+# Python caches
+_pycache_/
+*.py[cod]
+*$py.class
+
+# Local database (SQLite)
+backend/instance/dev.db
+
+# Environment variables
+backend/.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
